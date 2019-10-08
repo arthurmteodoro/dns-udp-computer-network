@@ -11,7 +11,22 @@
 #define BUF_SIZE 1024
 
 /* Driver code */
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc == 2 && !strcmp("-h", argv[1])) {
+        printf("Usage: \n");
+        printf("client <mode> <name> [IP address]\n");
+        printf("\nModes:\n");
+        printf("\t1 - for translate name to IP address\n");
+        printf("\t2 - for save name and IP in server\n");
+        printf("name: server name. Example: www.google.com\n");
+        printf("IP address: IP address to respective server name\n");
+        printf("\n\nUsage examples:\n");
+        printf("\tGet IP adress: client 1 www.google.com\n");
+        printf("\tSave IP address in server: client 2 www.google.com 172.217.29.228\n");
+
+        exit(EXIT_SUCCESS);
+    }
+
     int sockfd;
     char buffer[BUF_SIZE];
     struct sockaddr_in server_addr;
