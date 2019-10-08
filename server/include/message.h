@@ -9,6 +9,6 @@ struct message {
 typedef struct message *Message;
 
 void create_message(Message message, char* buffer);
-// void decode_message(char* buffer, Message message);
+void decode_message(char* buffer, Message message);
 
 #endif

@@ -15,4 +15,19 @@ void create_message(Message message, char* buffer) {
   }
 }
 
-// void decode_message(char* buffer, Message message);
+void decode_message(char* buffer, Message message) {
+  char buf[1024];
+  strcpy(buf, buffer);
+
+  char* token = strtok(buf, " ");
+  message->op = atoi(token);
+  
+  token = strtok(NULL, " ");
+  strcpy(message->name, token);
+
+  if (message->op == 2) {
+    token = strtok(NULL, " ");
+
+    strcpy(message->ip, token);
+  }
+}
