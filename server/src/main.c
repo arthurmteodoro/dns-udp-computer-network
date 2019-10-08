@@ -36,12 +36,15 @@ int main() {
 
     int n;
     socklen_t len;
-    n = recvfrom(sockfd, (char *) buffer, BUF_SIZE, MSG_WAITALL, (struct sockaddr *) &client_addr, &len);
-    buffer[n] = '\0';
 
-    printf("Client : %s\n", buffer);
-    sendto(sockfd, (const char *) hello, strlen(hello), MSG_CONFIRM, (const struct sockaddr *) &client_addr, len);
-    printf("Hello message sent.\n");
+    for(;;) {
+        n = recvfrom(sockfd, (char *) buffer, BUF_SIZE, MSG_WAITALL, (struct sockaddr *) &client_addr, &len);
+        buffer[n] = '\0';
+
+        printf("Client : %s\n", buffer);
+        sendto(sockfd, (const char *) hello, strlen(hello), MSG_CONFIRM, (const struct sockaddr *) &client_addr, len);
+        printf("Hello message sent.\n");
+    }
 
     return 0;
 }
