@@ -10,21 +10,24 @@
 #define PORT 8080
 #define BUF_SIZE 1024
 
-/* Driver code */
 int main(int argc, char* argv[]) {
-    if (argc == 2 && !strcmp("-h", argv[1])) {
-        printf("Usage: \n");
-        printf("client <mode> <name> [IP address]\n");
-        printf("\nModes:\n");
-        printf("\t1 - for translate name to IP address\n");
-        printf("\t2 - for save name and IP in server\n");
-        printf("name: server name. Example: www.google.com\n");
-        printf("IP address: IP address to respective server name\n");
-        printf("\n\nUsage examples:\n");
-        printf("\tGet IP adress: client 1 www.google.com\n");
-        printf("\tSave IP address in server: client 2 www.google.com 172.217.29.228\n");
+    if ((argc <= 1) ||
+       (argc == 2 && !strcmp("-h", argv[1])) ||
+       (!strcmp("1", argv[1]) && argc != 3) ||
+       (!strcmp("2", argv[1]) && argc != 4) ||
+       (strcmp("1", argv[1]) && strcmp("2", argv[1]))) {
+            printf("Usage: \n");
+            printf("client <mode> <name> [IP address]\n");
+            printf("\nModes:\n");
+            printf("\t1 - for translate name to IP address\n");
+            printf("\t2 - for save name and IP in server\n");
+            printf("name: server name. Example: www.google.com\n");
+            printf("IP address: IP address to respective server name\n");
+            printf("\n\nUsage examples:\n");
+            printf("\tGet IP adress: client 1 www.google.com\n");
+            printf("\tSave IP address in server: client 2 www.google.com 172.217.29.228\n");
 
-        exit(EXIT_SUCCESS);
+            exit(EXIT_SUCCESS);
     }
 
     int sockfd;
@@ -47,7 +50,17 @@ int main(int argc, char* argv[]) {
     int n;
     socklen_t len;
 
-    char message[] = "Ola mundo";
+    char message[BUF_SIZE];
+    strcpy(message, argv[1]);
+    strcat(message, " ");
+    if (!strcmp("1", argv[1])) {
+        strcat(message, argv[2]);
+    } else {
+        strcat(message, argv[2]);
+        strcat(message, " ");
+        strcat(message, argv[3]);
+    }
+    printf("%s\n", message);
 
     sendto(sockfd, (const char *) message, strlen(message), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr));
     printf("Hello message sent.\n");
