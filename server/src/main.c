@@ -13,6 +13,7 @@
 int main() {
     int sockfd;
     char buffer[BUF_SIZE];
+    char *hello = "Hello from server";
     struct sockaddr_in server_addr, client_addr;
 
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -33,17 +34,14 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    for(;;) {
-        int n;
-        socklen_t len;
-        n = recvfrom(sockfd, (char *) buffer, BUF_SIZE, MSG_WAITALL, (struct sockaddr *) &client_addr, &len);
-        buffer[n] = '\0';
+    int n;
+    socklen_t len;
+    n = recvfrom(sockfd, (char *) buffer, BUF_SIZE, MSG_WAITALL, (struct sockaddr *) &client_addr, &len);
+    buffer[n] = '\0';
 
-        printf("Client : %s\n", buffer);
-
-        sendto(sockfd, (const char *) buffer, strlen(buffer), MSG_CONFIRM, (const struct sockaddr *) &client_addr, len);
-        printf("Hello message sent.\n");
-    }
+    printf("Client : %s\n", buffer);
+    sendto(sockfd, (const char *) hello, strlen(hello), MSG_CONFIRM, (const struct sockaddr *) &client_addr, len);
+    printf("Hello message sent.\n");
 
     return 0;
 }
