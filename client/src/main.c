@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include "message.h"
 
 #define PORT 8080
 #define BUF_SIZE 1024
@@ -34,7 +35,6 @@ int main(int argc, char* argv[]) {
     char buffer[BUF_SIZE];
     struct sockaddr_in server_addr;
 
-    /* Creating socket file descriptor */
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("socket creation failed");
         exit(EXIT_FAILURE);
@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
 
     memset(&server_addr, 0, sizeof(server_addr));
 
-    /* Filling server information */
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(PORT);
     server_addr.sin_addr.s_addr = INADDR_ANY;
@@ -51,15 +50,13 @@ int main(int argc, char* argv[]) {
     socklen_t len;
 
     char message[BUF_SIZE];
-    strcpy(message, argv[1]);
-    strcat(message, " ");
-    if (!strcmp("1", argv[1])) {
-        strcat(message, argv[2]);
-    } else {
-        strcat(message, argv[2]);
-        strcat(message, " ");
-        strcat(message, argv[3]);
-    }
+    struct message message_to_server;
+    message_to_server.op = atoi(argv[1]);
+    strcpy(message_to_server.name, argv[2]);
+    if (message_to_server.op == 2)
+        strcpy(message_to_server.ip, argv[3]);
+
+    create_message(&message_to_server, message);
     printf("%s\n", message);
 
     sendto(sockfd, (const char *) message, strlen(message), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr));

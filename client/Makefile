@@ -1,6 +1,6 @@
 TARGET = client.out
 
-CFLAGS = -static -g -Wall -std=c99
+CFLAGS = -static -g -Wall -std=c99 -Iinclude/
 LDFLAGS =  -g -Wall
 CC = gcc
 
