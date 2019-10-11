@@ -57,14 +57,17 @@ int main(int argc, char* argv[]) {
         strcpy(message_to_server.ip, argv[3]);
 
     create_message(&message_to_server, message);
-    printf("%s\n", message);
+    if (message_to_server.op == 1) {
+        printf("Request to translate %s name to IP address\n", message_to_server.name);
+    } else if (message_to_server.op == 2) {
+        printf("Request to save %s name in %s IP address\n", message_to_server.name, message_to_server.ip);
+    }
 
     sendto(sockfd, (const char *) message, strlen(message), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr));
-    printf("Hello message sent.\n");
 
     n = recvfrom(sockfd, (char *) buffer, BUF_SIZE, MSG_WAITALL, (struct sockaddr *) &server_addr, &len);
     buffer[n] = '\0';
-    printf("Server : %s\n", buffer);
+    printf("Response : %s\n", buffer);
 
     close(sockfd);
     return 0;
