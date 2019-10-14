@@ -14,7 +14,6 @@
 char* get_ip(char* filename, char* name) {
     FILE* file = fopen(filename, "r");
     char line[BUF_SIZE];
-    int name_finded = 0;
 
     while(fgets(line, BUF_SIZE, file) != NULL) {
         if(line[strlen(line)-1] == '\n')
